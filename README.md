@@ -33,3 +33,9 @@ Add-Migration TabelasIniciais
 ```
 Update-Database -Verbose
 ```
+
+### Comando para instalação do container de injeção de dependência Ninject
+
+```
+Install-Package Ninject.MVC3 -version 3.2.1
+```
