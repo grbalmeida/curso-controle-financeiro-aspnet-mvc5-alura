@@ -1,5 +1,6 @@
 ﻿using Financas.DAO;
 using Financas.Entidades;
+using Financas.Models;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -8,8 +9,8 @@ namespace Financas.Controllers
     [Authorize]
     public class MovimentacaoController : Controller
     {
-        private MovimentacaoDAO movimentacaoDAO;
-        private UsuarioDAO usuarioDAO;
+        private readonly MovimentacaoDAO movimentacaoDAO;
+        private readonly UsuarioDAO usuarioDAO;
 
         public MovimentacaoController(MovimentacaoDAO movimentacaoDAO, UsuarioDAO usuarioDAO)
         {
@@ -42,6 +43,20 @@ namespace Financas.Controllers
         {
             IList<Movimentacao> movimentacoes = movimentacaoDAO.Lista();
             return View(movimentacoes);
+        }
+
+        public ActionResult MovimentacoesPorUsuario(MovimentacoesPorUsuarioModel model)
+        {
+            model.Usuarios = usuarioDAO.Lista();
+            model.Movimentacoes = movimentacaoDAO.BuscarPorUsuario(model.UsuarioId);
+            return View(model);
+        }
+
+        public ActionResult Busca(BuscaMovimentacoesModel model)
+        {
+            model.Usuarios = usuarioDAO.Lista();
+            model.Movimentacoes = movimentacaoDAO.Busca(model);
+            return View(model);
         }
     }
 }

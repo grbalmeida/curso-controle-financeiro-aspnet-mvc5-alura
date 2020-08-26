@@ -10,7 +10,7 @@ namespace Financas.Controllers
 {
     public class UsuarioController : Controller
     {
-        private UsuarioDAO usuarioDAO;
+        private readonly UsuarioDAO usuarioDAO;
 
         public UsuarioController(UsuarioDAO usuarioDAO)
         {
