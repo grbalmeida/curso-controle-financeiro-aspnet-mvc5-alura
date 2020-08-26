@@ -1,8 +1,10 @@
 ﻿using Financas.DAO;
 using Financas.Entidades;
-using System.Collections;
+using Financas.Models;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.Web.Security;
+using WebMatrix.WebData;
 
 namespace Financas.Controllers
 {
@@ -20,16 +22,29 @@ namespace Financas.Controllers
             return View();
         }
 
-        public ActionResult Adiciona(Usuario usuario)
+        public ActionResult Adiciona(UsuarioModel model)
         {
             if (ModelState.IsValid)
             {
-                usuarioDAO.Adiciona(usuario);
-                return RedirectToAction("Index");
+                try
+                {
+                    WebSecurity.CreateUserAndAccount(
+                        model.Nome,
+                        model.Senha,
+                        new { model.Email }
+                    );
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (MembershipCreateUserException e)
+                {
+                    ModelState.AddModelError("usuario.Invalido", e.Message);
+                    return View(nameof(Form), model);
+                }
             }
             else
             {
-                return View(nameof(Form), usuario);
+                return View(nameof(Form), model);
             }
         }
 
